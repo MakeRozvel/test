@@ -1,79 +1,58 @@
-//  ПЯТОЕ ЗАНЯТИЕ  *****************************************************************************************************************************    ПЯТОЕ ЗАНЯТИЕ
-
+//  ШЕСТОЕ ЗАНЯТИЕ  *****************************************************************************************************************************    ШЕСТОЕ ЗАНЯТИЕ
 const getRandomNumInRange = (min, max) => {
-        const randomNum = (Math.random() * (max  - min) + min).toFixed(0)
+        const randomNum = (Math.random() * (max - min) + min).toFixed(0)
         return randomNum
 }
-
 const getTask = () => {
-        const symbol = (Math.random() > 0.5) ? "+" : "-" // ? - выполнение если true, : - выполнение если false
+        const symbol = (Math.random() > 0.5) ? "+" : "-"
         const task = `${getRandomNumInRange(0, 100)} ${symbol} ${getRandomNumInRange(0, 100)}`
         gameState.rightAnswer = eval(task)
         return task
 }
-
 const toggleGameState = () => {
         gameState.taskInProcess = !gameState.taskInProcess
 }
-
 const gameElements = document.getElementById("my_game").children
 const title = gameElements[0]
 const userTask = gameElements[1]
 const userAnswer = gameElements[2]
 const btnGame = gameElements[3]
-
 const gameState = {
         taskInProcess: false,
         rightAnswer: null,
 }
-
 const startGameFunc = () => {
         if (!gameState.taskInProcess) {
                 title.innerText = "Игра началась!"
                 userAnswer.value = null
-                userTask.innerText = getTask()  
-                userAnswer.hidden = false 
+                userTask.innerText = getTask()
+                userAnswer.hidden = false
         } else {
-                const isRight = gameState.rightAnswer == userAnswer.value   
-                userTask.innerText = userTask.innerText + " = " + gameState.rightAnswer 
+                const isRight = gameState.rightAnswer == userAnswer.value
+                userTask.innerText = userTask.innerText + " = " + gameState.rightAnswer
                 title.innerText = "Вы П" + ((isRight) ? "обедили!" : "роиграли!")
         }
         toggleGameState()
         btnGame.innerText = (gameState.taskInProcess) ? "Проверить!" : "Начать заново!"
 }
-
 btnGame.addEventListener("click", startGameFunc)
 userAnswer.addEventListener("keydown", (e) => {
-        // console.log(e)
         if (e.key === "Enter") {
                 startGameFunc()
         } else if (e.key === "Escape") {
-                userAnswer.blur()               // Убрать фокус с активного элемента\
+                userAnswer.blur()
         }
 })
 
-// -------------------------------------------------------------------------------------------------
-
 const choosedEl = document.querySelectorAll(".choosed_block-container > div")
-// console.log(choosedEl.length)
 const counterEl = document.querySelector(".choosed_block span")
-
-// const choosedState = {
-//         countElements: 0,
-// }
-
-// const changeCount = (value) => {
-//         choosedState.countElements += value
-//         counterEl.innerText = choosedState.countElements
-// }
-const choosedState = {                          //Пример Инкуплусяции - сокрытие инфрмации
-        countElements: 0,                      //                      внутреними методами
+const choosedState = {
+        countElements: 0,
         setCountValue(value) {
                 this.countElements += value
                 counterEl.innerText = this.countElements
         }
 }
-
 const eventFunc = (e) => {
         if (e.target.className === "") {
                 e.target.className = "choosed_element"
@@ -86,8 +65,180 @@ const eventFunc = (e) => {
 for (let i = 0; i < choosedEl.length; i++) {
         choosedEl[i].addEventListener("click", eventFunc)
 }
-// Сначала в цикле повесели на все элементы обработчик событий, а потом....
-choosedEl[2].removeEventListener("click", eventFunc) // убрали его у второго элеменат!
+//----------------------------------------------------------------------------------
+
+// const timeIsOver = () => {
+//         alert("Время вышло!")
+// }
+// setTimeout(timeIsOver, 2000) //время задаеться в милисекундах, ms
+// const alarm =  setInterval(timeIsOver, 3000)         // Выполняеться постоянно
+// const alarm = setInterval(() => {
+//         let wantToSleep = confirm("Хотите ли вы спать?")
+//         if (wantToSleep) {
+//                 console.log("tic")
+//         } else {
+//                 clearInterval(alarm) // Отменить выполнение setInterval
+//         }
+// }, 3000)
+
+// console.log("1")
+// setTimeout(() => {
+//      console.log("2")   
+// }, 0)
+// console.log("3")
+// РЕЗУЛЬТАТ: 1, 3, 2 -- Сначала выполняеться синхронный код, а потом асинхронный
+
+const postsBlock = document.querySelector(".posts_block-container")
+// const postTitle = document.querySelector(".posts_block-container h3")
+// const postBody = document.querySelector(".posts_block-container span")
+const showPostsBTN = document.querySelector(".posts_block button")
+
+//const func = () => {
+//        return 5
+//} ПРИРАВНИВАЕТСЯ К: const func = () => 5
+
+function addPost(title, body) {
+        const postTitle = document.createElement("h3")
+        const postBody = document.createElement("span")
+        const postItem = document.createElement("p")
+
+        postTitle.innerText = title
+        postBody.innerText = body
+
+        postItem.append(postTitle, postBody)
+        postsBlock.append(postItem)
+}
+
+function getPosts() {
+        fetch("https://jsonplaceholder.typicode.com/posts")
+        .then(res => res.json())
+        .then(data => {
+                for (item of data) {
+                        addPost(item.title, item.body)
+                }
+                // addPost(data[7].title, data[7].body)
+                // console.log(data)
+        })
+        .catch(err => console.log(err.message)) // Обработчик ошибок
+}
+
+// function createPost(title, body, userId) {
+//         fetch("https://jsonplaceholder.typicode.com/posts", {
+//                 method: 'POST',
+//                 body: JSON.stringify({
+//                         title,  // title: title,
+//                         body,   // body: body,
+//                         userId, // userId: userId,
+//                 }),
+//                 headers: {
+//                         'Content-type': 'application/json; charset=UTF-8'
+//                 },
+//         })
+//                 .then(res => {
+//                         console.log(res)
+//                         // return res.json()
+//                 })
+//                 .catch(err => console.log(err.message))
+// }
+
+// createPost("title", "body", 15)
+
+showPostsBTN.onclick = getPosts
+
+
+//  ШЕСТОЕ ЗАНЯТИЕ  *****************************************************************************************************************************    ШЕСТОЕ ЗАНЯТИЕ
+
+
+//  ПЯТОЕ ЗАНЯТИЕ  *****************************************************************************************************************************    ПЯТОЕ ЗАНЯТИЕ
+
+// const getRandomNumInRange = (min, max) => {
+//         const randomNum = (Math.random() * (max  - min) + min).toFixed(0)
+//         return randomNum
+// }
+
+// const getTask = () => {
+//         const symbol = (Math.random() > 0.5) ? "+" : "-" // ? - выполнение если true, : - выполнение если false
+//         const task = `${getRandomNumInRange(0, 100)} ${symbol} ${getRandomNumInRange(0, 100)}`
+//         gameState.rightAnswer = eval(task)
+//         return task
+// }
+
+// const toggleGameState = () => {
+//         gameState.taskInProcess = !gameState.taskInProcess
+// }
+
+// const gameElements = document.getElementById("my_game").children
+// const title = gameElements[0]
+// const userTask = gameElements[1]
+// const userAnswer = gameElements[2]
+// const btnGame = gameElements[3]
+
+// const gameState = {
+//         taskInProcess: false,
+//         rightAnswer: null,
+// }
+
+// const startGameFunc = () => {
+//         if (!gameState.taskInProcess) {
+//                 title.innerText = "Игра началась!"
+//                 userAnswer.value = null
+//                 userTask.innerText = getTask()
+//                 userAnswer.hidden = false
+//         } else {
+//                 const isRight = gameState.rightAnswer == userAnswer.value
+//                 userTask.innerText = userTask.innerText + " = " + gameState.rightAnswer
+//                 title.innerText = "Вы П" + ((isRight) ? "обедили!" : "роиграли!")
+//         }
+//         toggleGameState()
+//         btnGame.innerText = (gameState.taskInProcess) ? "Проверить!" : "Начать заново!"
+// }
+
+// btnGame.addEventListener("click", startGameFunc)
+// userAnswer.addEventListener("keydown", (e) => {
+//         // console.log(e)
+//         if (e.key === "Enter") {
+//                 startGameFunc()
+//         } else if (e.key === "Escape") {
+//                 userAnswer.blur()               // Убрать фокус с активного элемента\
+//         }
+// })
+
+// // -------------------------------------------------------------------------------------------------
+
+// const choosedEl = document.querySelectorAll(".choosed_block-container > div")
+// // console.log(choosedEl.length)
+// const counterEl = document.querySelector(".choosed_block span")
+
+// // const choosedState = {
+// //         countElements: 0,
+// // }
+
+// // const changeCount = (value) => {
+// //         choosedState.countElements += value
+// //         counterEl.innerText = choosedState.countElements
+// // }
+// const choosedState = {                          //Пример Инкуплусяции - сокрытие инфрмации
+//         countElements: 0,                      //                      внутреними методами
+//         setCountValue(value) {
+//                 this.countElements += value
+//                 counterEl.innerText = this.countElements
+//         }
+// }
+
+// const eventFunc = (e) => {
+//         if (e.target.className === "") {
+//                 e.target.className = "choosed_element"
+//                 choosedState.setCountValue(1)
+//         } else {
+//                 e.target.className = ""
+//                 choosedState.setCountValue(-1)
+//         }
+// }
+// for (let i = 0; i < choosedEl.length; i++) {
+//         choosedEl[i].addEventListener("click", eventFunc)
+// }
+// // Сначала в цикле повесели на все элементы обработчик событий, а потом....
+// choosedEl[2].removeEventListener("click", eventFunc) // убрали его у второго элеменат!
 // for (let i = 0; i < choosedEl.length; i++) {
 //         choosedEl[i].addEventListener("click", (e) => {
 //                 // console.log(e)
@@ -107,7 +258,6 @@ choosedEl[2].removeEventListener("click", eventFunc) // убрали его у �
 // }
 
 // console.dir(document) // показывает свойства документа - изучить подробней потом
-
 //  ПЯТОЕ ЗАНЯТИЕ  *****************************************************************************************************************************    ПЯТОЕ ЗАНЯТИЕ
 
 
@@ -137,7 +287,7 @@ choosedEl[2].removeEventListener("click", eventFunc) // убрали его у �
 
 // const getTask = () => {
 //         // const randomNum1 = getRandomNumInRange(0, 100)
-//         // const randomNum2 = getRandomNumInRange(0, 100) 
+//         // const randomNum2 = getRandomNumInRange(0, 100)
 //         // let symbol
 //         // if (Math.random() >0.5) {
 //         //         symbol = "+"
@@ -207,7 +357,7 @@ choosedEl[2].removeEventListener("click", eventFunc) // убрали его у �
 // typeof Number("15") // Делает и строки число, принудительное смена типа? пожно проще: typeof +"15"
 // Но если строка не может быть преобразова в  число, то тип станет NaN
 // Число в строку это typeof String(15) или можно просто записать как 15+"" (Прибавление строки вк числу всегда делает его строкой)
-// Boolean() - дает с любым числом в скобках TRUE. 
+// Boolean() - дает с любым числом в скобках TRUE.
 //      Когда получим FALSE: число 0
 //                           пустая строка ""
 //                           NULL
@@ -221,7 +371,7 @@ choosedEl[2].removeEventListener("click", eventFunc) // убрали его у �
 //        alert("I don't know you..")
 //} else {
 //        alert(`Hi ${UserName}`)
-//} 
+//}
 
 // const counts = prompt("До скольки вы хотите досчитать?", 20)
 // let i = 10
@@ -238,7 +388,7 @@ choosedEl[2].removeEventListener("click", eventFunc) // убрали его у �
 // //arr.push(7)     // добавляет значение в конец массива
 // for (let i = 1; i <= 50; ++i) {         //эта i видна только внутри for
 //         arr.push(i)
-// } 
+// }
 // const newArr = []
 // for ( item of arr) {
 //         const marker = item % 7
@@ -332,7 +482,7 @@ choosedEl[2].removeEventListener("click", eventFunc) // убрали его у �
 //const islove = document.getElementById('islove')
 //const string = document.getElementById('string')
 // console.log(span)                                 // Вывести в лог, консоль доступную в средствах разработчика
-// const SkillText = prompt('Какой язык вы учите?', 'пока не в курсе') 
+// const SkillText = prompt('Какой язык вы учите?', 'пока не в курсе')
 // skill.innerText = SkillText
 // const isloveValue = confirm('Вы любите изучаемый язык?')
 // console.log(isloveValue)

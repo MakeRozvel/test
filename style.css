@@ -2,6 +2,23 @@
 /* При верстке учитываем что самый маленький телефон это Galaxy Fold на 280px 
 А свыше 600px следует делать мобильное меню*/
 
+/* ШЕСТОЕ ЗАНЯТИЕ */
+.posts_block {
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.posts_block > h2 {
+    text-align: center;
+}
+
+.posts_block-container > * {
+    margin: 5px;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: lightskyblue;
+}
+
 /* ПЯТОЕ ЗАНЯТИЕ */
 
 .choosed_block {
@@ -88,6 +105,12 @@ header {
     background-color: lightgray;
     height: 50px;
 }
+footer {
+    background-color: lightgrey;
+    display: flex;
+    justify-content: center;
+}
+
 nav {
     /*border: 2px dotted black;*/
     /*width: max-content;*/
