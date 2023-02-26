@@ -3,6 +3,14 @@
 А свыше 600px следует делать мобильное меню*/
 
 /* ШЕСТОЕ ЗАНЯТИЕ */
+main * {
+    /* margin-top: 15px; */
+}
+
+nav > a:hover {
+    color: green;
+}
+
 .posts_block {
     max-width: 600px;
     margin: 20px auto;
@@ -55,6 +63,7 @@
 .about_us-description {
     display: flex;
     flex-direction: column;
+    margin-top: 50px;
 }
 
 .about_us-description * {
@@ -63,6 +72,7 @@
 
 .my_game > * {
     text-align: center;
+    margin-top: 50px;
 }
 
 .my_game input, .my_game button {
@@ -104,6 +114,9 @@
 header {
     background-color: lightgray;
     height: 50px;
+    width: 100%;
+    position: fixed;
+    top: 0px;
 }
 footer {
     background-color: lightgrey;
@@ -114,6 +127,7 @@ footer {
 nav {
     /*border: 2px dotted black;*/
     /*width: max-content;*/
+    width: inherit;
     height: inherit; /*наследуй от родителя - в данном случае header*/
     display: flex;
     justify-content: space-evenly;
